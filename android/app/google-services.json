@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "933412852339",
+    "project_id": "mytest-ec87a",
+    "storage_bucket": "mytest-ec87a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:933412852339:android:d64ce6151535ba47c59006",
+        "android_client_info": {
+          "package_name": "com.example.rakna_graduation_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "933412852339-h71279e32dfughjh2l7htbjk3u7idcq7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAk6TxHFpXBG-nkMA4qW79dDllljL3XOF8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "933412852339-h71279e32dfughjh2l7htbjk3u7idcq7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "933412852339-pqbcuhaqkqb8dfdhgs7viccusgq9tja5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.raknaGraduationProject"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
