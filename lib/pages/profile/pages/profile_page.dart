@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rakna_graduation_project/config/widgets/custom_login_sginup_button.dart';
 import 'package:rakna_graduation_project/config/widgets/custom_text_field.dart';
@@ -17,6 +18,9 @@ class _ProfilePageState extends State<ProfilePage> {
   GlobalKey<FormState> formKey = GlobalKey();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   final _items = ['male', 'female', 'Gender'];
+  
+  //firebase firestore
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +174,28 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {
                       if (formKey.currentState!.validate()) {
                         formKey.currentState!.save();
+                         
+                         //firebase firestore
+                        String userId = "User_Id";
+                         _firestore.collection('users').doc(userId).set({
+                          'name': name,
+                          'phoneNumber': phoneNumber,
+                         'email': email,
+                         'platesNumber': platesNumber,
+                         'gender': _dropdownValue
+                         },
+                         SetOptions(merge: true)).then((_) {
+                           ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Profile Updated!'))
+                         );
+                           }).catchError((error) {
+                      
+                          ScaffoldMessenger.of(context).showSnackBar(
+                         SnackBar(content: Text('Failed to update profile: $error'))
+                         );
+                       });
+
+
                         setState(() {
                           autovalidateMode = AutovalidateMode.disabled;
                         });

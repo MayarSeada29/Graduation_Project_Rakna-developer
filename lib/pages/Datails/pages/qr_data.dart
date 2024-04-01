@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:qr_flutter/qr_flutter.dart';
@@ -13,6 +14,23 @@ class QRPage extends StatefulWidget {
 }
 
 class _QRPageState extends State<QRPage> {
+  
+   // FirebaseFirestore
+   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+   void _saveTicketData(String data) 
+  {
+   _firestore.collection('tickets').add({
+    'garageName': 'RAKNA',
+    'entryTime': '11:11',
+    'qrData': data, 
+   }).then((DocumentReference document) {
+    print('Ticket added with ID: ${document.id}');   
+   }).catchError((e) {
+    print('Error adding ticket: $e');
+   });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,6 +100,7 @@ class _QRPageState extends State<QRPage> {
                   child: QrImageView(
                     // Pass your QR data here
                     data: 'Karam Mohamed Karam',
+                    // String qrData = 'Karam Mohamed Karam';
                     // Additional properties as needed (version, size, etc.)
                     version: QrVersions.auto,
                     gapless: false,

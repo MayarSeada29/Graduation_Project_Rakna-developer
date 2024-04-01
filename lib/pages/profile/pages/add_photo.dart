@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -13,6 +15,10 @@ class Add_photo extends StatefulWidget {
 class _Add_photoState extends State<Add_photo> {
   Uint8List? _image;
   File? selectedIMage;
+
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +106,30 @@ class _Add_photoState extends State<Add_photo> {
         );
       },
     );
+  }
+
+  Future<void> uploadImage(File image) async {
+    try {
+      String userId = 'User_Id';
+
+      // Firebase Storage عشان يخزن الصوره في
+      TaskSnapshot snapshot =
+          await _storage.ref('profilePictures/$userId').putFile(image);
+      //  عشان ياخد URL بتاع الصوره
+      String imageUrl = await snapshot.ref.getDownloadURL();
+
+      // عشان يخزن ال URL في ال FIRESTORE
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .set({'profilePicture': imageUrl}, SetOptions(merge: true));
+
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Profile picture updated!')));
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile picture: $e')));
+    }
   }
 
   Future _PickImageFromGallery() async {

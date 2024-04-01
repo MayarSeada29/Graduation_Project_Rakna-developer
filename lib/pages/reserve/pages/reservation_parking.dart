@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:rakna_graduation_project/config/widgets/appbar.dart';
 import 'package:rakna_graduation_project/config/widgets/custom_login_sginup_button.dart';
@@ -21,6 +22,36 @@ class _ReservePageState extends State<ReservePage> {
   TimeOfDay _selectedTime2 = TimeOfDay.now();
   Duration _difference = Duration.zero;
   double hourlyRate = 10.0;
+  
+
+  // FirebaseFirestore
+//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+//   void _saveReservationDetails() {
+//   String userId = 'User_Id';
+
+//   Map<String, dynamic> reservationData = {
+//     'userId': userId,
+//     'selectedDay': _selectedDay,
+//     'startTime': _selectedTime1.format(context),
+//     'endTime': _selectedTime2.format(context),
+//     'totalCost': (_difference.inHours * hourlyRate).toStringAsFixed(2),};
+
+//     _firestore.collection('reservations').add(reservationData)
+//     .then(() {
+//      ScaffoldMessenger.of(context).showSnackBar(
+//      SnackBar(content: Text('Reservation saved successfully')),
+//      ); 
+//   }).catchError((error) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(content: Text('Failed to save reservation: $error')),
+//     );
+    
+//   });
+// }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,12 +255,45 @@ class _ReservePageState extends State<ReservePage> {
           CustomButton(
             text: "CONFIRM",
             isEnabled: true,
-            onTap: () {},
-          )
+           onTap: () {
+           if (_difference != Duration.zero) {
+           _saveReservationDetails();
+           } else {
+           ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(content: Text('Please select a valid time range')),
+          );
+      }
+    },
+   )
         ],
       ),
     );
   }
+
+
+   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  void _saveReservationDetails() {
+  String userId = 'User_Id';
+
+  Map<String, dynamic> reservationData = {
+    'userId': userId,
+    'selectedDay': _selectedDay,
+    'startTime': _selectedTime1.format(context),
+    'endTime': _selectedTime2.format(context),
+    'totalCost': (_difference.inHours * hourlyRate).toStringAsFixed(2),};
+
+    _firestore.collection('reservations').add(reservationData)
+  .then((_) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Reservation saved successfully')),
+    );
+  }).catchError((error) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to save reservation: $error')),
+    );
+  });
+}
 
   void _calculateDifference() {
     int totalMinutesDiff;

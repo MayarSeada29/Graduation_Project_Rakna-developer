@@ -37,6 +37,10 @@ dependencies:
   ticket_widget: ^1.0.2
   table_calendar: ^3.1.0
   flutter_colorpicker: ^1.0.3
+  cloud_firestore: ^4.15.10
+  firebase_storage: ^11.6.11
+  
+  
 
 
 
